@@ -12,12 +12,8 @@ public class SocketStats implements
     SocketStatsMBean, SocketMonitor {
     private final AtomicLong bytesRead = new AtomicLong(0);
     private final AtomicLong bytesWritten = new AtomicLong(0);
-    private final ConcurrentMap<Socket, AtomicLong>
-        individualBytesRead =
-        new ConcurrentHashMap<Socket, AtomicLong>();
-    private final ConcurrentMap<Socket, AtomicLong>
-        individualBytesWritten =
-        new ConcurrentHashMap<Socket, AtomicLong>();
+    private final ConcurrentMap<Socket, AtomicLong> individualBytesRead = new ConcurrentHashMap<Socket, AtomicLong>();
+    private final ConcurrentMap<Socket, AtomicLong> individualBytesWritten = new ConcurrentHashMap<Socket, AtomicLong>();
 
     SocketStats() {
     }
@@ -48,8 +44,7 @@ public class SocketStats implements
         increment(socket, len, individualBytesWritten);
     }
 
-    private void increment(Socket socket, int bytes,
-                           ConcurrentMap<Socket, AtomicLong> map) {
+    private void increment(Socket socket, int bytes, ConcurrentMap<Socket, AtomicLong> map) {
         AtomicLong counter = map.get(socket);
         if (counter == null) {
             counter = new AtomicLong(0);

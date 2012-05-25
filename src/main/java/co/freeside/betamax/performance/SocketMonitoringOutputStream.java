@@ -7,9 +7,7 @@ public class SocketMonitoringOutputStream extends OutputStream {
     private final OutputStream out;
     private final Socket socket;
 
-    public SocketMonitoringOutputStream(Socket socket,
-                                        OutputStream out)
-        throws IOException {
+    public SocketMonitoringOutputStream(Socket socket, OutputStream out) throws IOException {
         this.out = out;
         this.socket = socket;
     }
@@ -19,8 +17,7 @@ public class SocketMonitoringOutputStream extends OutputStream {
         SocketMonitoringSystem.getInstance().write(socket, b);
     }
 
-    public void write(byte[] b, int off, int length)
-        throws IOException {
+    public void write(byte[] b, int off, int length) throws IOException {
         out.write(b, off, length);
         SocketMonitoringSystem.getInstance().
             write(socket, b, off, length);

@@ -10,8 +10,7 @@ public class MonitoringSocketImpl extends SocketImpl {
     private final Delegator delegator;
 
     public MonitoringSocketImpl() throws IOException {
-        this.delegator = new Delegator(this, SocketImpl.class,
-            "java.net.SocksSocketImpl");
+        this.delegator = new Delegator(this, SocketImpl.class, "java.net.SocksSocketImpl");
     }
 
     private Socket getSocket() throws IOException {
@@ -48,9 +47,7 @@ public class MonitoringSocketImpl extends SocketImpl {
     // necessary here, but just to show how you would do it.
     public void connect(InetAddress address, int port)
         throws IOException {
-        delegator
-            .delegateTo("connect", InetAddress.class, int.class)
-            .invoke(address, port);
+        delegator.delegateTo("connect", InetAddress.class, int.class).invoke(address, port);
     }
 
     public void connect(SocketAddress address, int timeout)
@@ -119,9 +116,7 @@ public class MonitoringSocketImpl extends SocketImpl {
         return delegator.invoke();
     }
 
-    public void setPerformancePreferences(int connectionTime,
-                                          int latency,
-                                          int bandwidth) {
+    public void setPerformancePreferences(int connectionTime, int latency, int bandwidth) {
         delegator.invoke(connectionTime, latency, bandwidth);
     }
 

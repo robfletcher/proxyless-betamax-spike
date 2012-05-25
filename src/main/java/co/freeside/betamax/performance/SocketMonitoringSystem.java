@@ -6,8 +6,7 @@ import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class SocketMonitoringSystem {
-    private final static SocketMonitoringSystem instance =
-        new SocketMonitoringSystem();
+    private final static SocketMonitoringSystem instance = new SocketMonitoringSystem();
 
     public static SocketMonitoringSystem getInstance() {
         return instance;
@@ -38,31 +37,25 @@ public class SocketMonitoringSystem {
         monitors.remove(monitor);
     }
 
-    public void write(Socket socket, int data)
-        throws IOException {
+    public void write(Socket socket, int data) throws IOException {
         for (SocketMonitor monitor : monitors) {
             monitor.write(socket, data);
         }
     }
 
-    public void write(Socket socket,
-                      byte[] data, int offset, int length)
-        throws IOException {
+    public void write(Socket socket, byte[] data, int offset, int length) throws IOException {
         for (SocketMonitor monitor : monitors) {
             monitor.write(socket, data, offset, length);
         }
     }
 
-    public void read(Socket socket, int data)
-        throws IOException {
+    public void read(Socket socket, int data) throws IOException {
         for (SocketMonitor monitor : monitors) {
             monitor.read(socket, data);
         }
     }
 
-    public void read(Socket socket,
-                     byte[] data, int offset, int length)
-        throws IOException {
+    public void read(Socket socket, byte[] data, int offset, int length) throws IOException {
         for (SocketMonitor monitor : monitors) {
             monitor.read(socket, data, offset, length);
         }

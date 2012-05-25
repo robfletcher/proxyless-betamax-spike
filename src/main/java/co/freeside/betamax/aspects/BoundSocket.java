@@ -25,8 +25,7 @@ public class BoundSocket {
     }
 
     @Around("input(s)")
-    public Object wrapInputStream(ProceedingJoinPoint joinPoint,
-                                  Socket s)
+    public Object wrapInputStream(ProceedingJoinPoint joinPoint, Socket s)
         throws Throwable {
         InputStream in = (InputStream) joinPoint.proceed();
         return new SocketMonitoringInputStream(s, in);
@@ -37,8 +36,7 @@ public class BoundSocket {
     }
 
     @Around("output(s)")
-    public Object wrapOutputStream(ProceedingJoinPoint joinPoint,
-                                   Socket s)
+    public Object wrapOutputStream(ProceedingJoinPoint joinPoint, Socket s)
         throws Throwable {
         OutputStream out = (OutputStream) joinPoint.proceed();
         return new SocketMonitoringOutputStream(s, out);

@@ -7,15 +7,13 @@ public class Delegator {
     private final Object delegate;
     private final Class superclass;
 
-    public Delegator(Object source, Class superclass,
-                     Object delegate) {
+    public Delegator(Object source, Class superclass, Object delegate) {
         this.source = source;
         this.superclass = superclass;
         this.delegate = delegate;
     }
 
-    public Delegator(Object source, Class superclass,
-                     String delegateClassName) {
+    public Delegator(Object source, Class superclass, String delegateClassName) {
         try {
             this.source = source;
             this.superclass = superclass;
@@ -35,6 +33,13 @@ public class Delegator {
     public final <T> T invoke(Object... args) {
         try {
             String methodName = extractMethodName();
+            StringBuilder argTypes = new StringBuilder("[");
+            for (int i = 0; i < args.length; i++) {
+                if (i > 0) argTypes.append(", ");
+                argTypes.append(args[i].getClass().getName());
+            }
+            argTypes.append(']');
+            System.out.printf("looking for a method called %s that takes %s on %s%n", methodName, argTypes.toString(), delegate.getClass().getName());
             Method method = findMethod(methodName, args);
             @SuppressWarnings("unchecked")
             T t = (T) invoke0(method, args);
@@ -60,8 +65,7 @@ public class Delegator {
         }
     }
 
-    private void writeFields(Class clazz, Object from, Object to)
-        throws Exception {
+    private void writeFields(Class clazz, Object from, Object to) throws Exception {
         for (Field field : clazz.getDeclaredFields()) {
             field.setAccessible(true);
             field.set(to, field.get(from));
@@ -74,8 +78,7 @@ public class Delegator {
         return methodName;
     }
 
-    private Method findMethod(String methodName, Object[] args)
-        throws NoSuchMethodException {
+    private Method findMethod(String methodName, Object[] args) throws NoSuchMethodException {
         Class<?> clazz = superclass;
         if (args.length == 0) {
             return clazz.getDeclaredMethod(methodName);
@@ -94,8 +97,7 @@ public class Delegator {
                     if (match == null) {
                         match = method;
                     } else {
-                        throw new DelegationException(
-                            "Duplicate matches");
+                        throw new DelegationException("Duplicate matches");
                     }
                 }
             }
@@ -103,8 +105,7 @@ public class Delegator {
         if (match != null) {
             return match;
         }
-        throw new DelegationException(
-            "Could not find method: " + methodName);
+        throw new DelegationException("Could not find method: " + methodName);
     }
 
     private Class<?> convertPrimitiveClass(Class<?> primitive) {
@@ -137,16 +138,14 @@ public class Delegator {
         return primitive;
     }
 
-    public DelegatorMethodFinder delegateTo(String methodName,
-                                            Class<?>... parameters) {
+    public DelegatorMethodFinder delegateTo(String methodName, Class<?>... parameters) {
         return new DelegatorMethodFinder(methodName, parameters);
     }
 
     public class DelegatorMethodFinder {
         private final Method method;
 
-        public DelegatorMethodFinder(String methodName,
-                                     Class<?>... parameterTypes) {
+        public DelegatorMethodFinder(String methodName, Class<?>... parameterTypes) {
             try {
                 method = superclass.getDeclaredMethod(
                     methodName, parameterTypes
