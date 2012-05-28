@@ -2,6 +2,7 @@ package co.freeside.betamax.performance;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.*;
 
 public class SocketMonitoringInputStream extends InputStream {
     private final Socket socket;
@@ -13,6 +14,7 @@ public class SocketMonitoringInputStream extends InputStream {
     }
 
     public int read() throws IOException {
+		System.out.print('<');
         int result = in.read();
         if (result != -1) {
             SocketMonitoringSystem.getInstance().read(socket, result);
@@ -21,9 +23,10 @@ public class SocketMonitoringInputStream extends InputStream {
     }
 
     public int read(byte[] b, int off, int len) throws IOException {
-        int length = in.read(b, off, len);
+		System.out.print('<');
+		int length = in.read(b, off, len);
         if (length != -1) {
-            SocketMonitoringSystem.getInstance().read(socket, b, off, length);
+			SocketMonitoringSystem.getInstance().read(socket, b, off, length);
         }
         return length;
     }

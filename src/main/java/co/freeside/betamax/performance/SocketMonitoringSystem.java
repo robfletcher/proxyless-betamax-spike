@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.*;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArraySet;
+import javax.net.ssl.*;
 
 public class SocketMonitoringSystem {
     private final static SocketMonitoringSystem instance = new SocketMonitoringSystem();
@@ -20,7 +21,10 @@ public class SocketMonitoringSystem {
     public static void initForDelegator() throws IOException {
         SocketImplFactory socketImplFactory = new MonitoringSocketFactory();
         Socket.setSocketImplFactory(socketImplFactory);
-        ServerSocket.setSocketFactory(socketImplFactory);
+		ServerSocket.setSocketFactory(socketImplFactory);
+
+		SSLSocketFactory sslSocketFactory = new MonitoringSSLSocketFactory(HttpsURLConnection.getDefaultSSLSocketFactory());
+		HttpsURLConnection.setDefaultSSLSocketFactory(sslSocketFactory);
     }
 
     private SocketMonitoringSystem() {
